@@ -1,8 +1,12 @@
+import { useContext } from 'react';
+
 import { Helmet } from 'react-helmet-async';
 import { faker } from '@faker-js/faker';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
+import { Context } from '../Context';
+
 // components
 import Iconify from '../components/iconify';
 // sections
@@ -22,6 +26,7 @@ import {
 
 export default function DashboardAppPage() {
   const theme = useTheme();
+  const {session}=useContext(Context)
 
   return (
     <>
@@ -31,7 +36,7 @@ export default function DashboardAppPage() {
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back To The Coding Catalyst
+          Hi,{session.user.email.split('@')[0]}  Welcome back To The Offer Services
         </Typography>
 
         <Grid container spacing={3}>

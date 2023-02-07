@@ -1,28 +1,35 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-// @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import {  useState } from 'react';
+// import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import {  Stack,  TextField } from '@mui/material';
+
 import { LoadingButton } from '@mui/lab';
 // components
-import Iconify from '../../../components/iconify';
+// import Iconify from '../../../components/iconify';
 
-// ----------------------------------------------------------------------
+import { supabase } from '../../../dbclient/supabseClient';
+// import  ValidUserContext from '../../../tccConext/authCheck';
 
 export default function LoginForm() {
-  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
 
-  const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    navigate('/dashboard', { replace: true });
+  const handleClick =  async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({ email })
+      if (error) throw error
+      alert('Check your email for the login link!')
+    } catch (error) {
+      alert(error.error_description || error.message)
+    } 
+   
   };
 
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="email" label="Email address" type={"email"}  value={email} onChange={(e)=>setEmail(e.target.value)}/>
 
-        <TextField
+        {/* <TextField
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
@@ -35,14 +42,14 @@ export default function LoginForm() {
               </InputAdornment>
             ),
           }}
-        />
+        /> */}
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Checkbox name="remember" label="Remember me" />
-        <Link variant="subtitle2" underline="hover">
+        {/* <Checkbox name="remember" label="Remember me" /> */}
+        {/* <Link variant="subtitle2" underline="hover">
           Forgot password?
-        </Link>
+        </Link> */}
       </Stack>
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>

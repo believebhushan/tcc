@@ -1,48 +1,59 @@
+import React,{useState,useContext, useEffect} from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
 // @mui
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
+import QRCode from 'react-qr-code';
 // components
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
+import {  ProductList, ProductCartWidget } from '../sections/@dashboard/products';
+import { Context } from '../Context';
+import getQr from './hooks/getQr';
+import LogOut from './hooks/logout';
 // mock
-import PRODUCTS from '../_mock/products';
 
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
-  const [openFilter, setOpenFilter] = useState(false);
+  const [openApp, setOpenApp] = useState(false);
+  const [qr,setQr]=useState({text:'Bharat',authenticated:false,init:false,reload:0})
+  const {session}=useContext(Context)
+  useEffect( ()=>{
+    if(!qr.authenticated){
+      getQr({id:session.user.id,qr,setQr})
+    }
+  },[qr.reload,qr.text])
+  
+  const buttonClick=()=>{
+    if(qr.authenticated){
+      LogOut({id:session.user.id})
+      setQr({...qr,authenticated:false,text:'',init:false})
+    }
+    else{
+      setQr({...qr,reload:qr.reload+1})
+    }
+  }
+  console.log(qr,"authenticated")
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
 
   return (
     <>
       <Helmet>
-        <title> TCC: Products </title>
+        <title> TCC: Products  </title>
       </Helmet>
 
-      <Container>
+       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Products for {session.user.email}
         </Typography>
-
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
-
-        <ProductList products={PRODUCTS} />
+      
+    {
+      qr?.text  && !qr.authenticated ? <QRCode value={qr?.text}/>:null
+    }
+    <button onClick={buttonClick}>{qr.authenticated? 'Logout':'Reload Qr'}</button>
+  
+  {
+    qr.authenticated?(<ProductList  />):null
+  }
+        
         <ProductCartWidget />
       </Container>
     </>
