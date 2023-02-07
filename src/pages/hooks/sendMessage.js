@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const url='https://whatnew-29aw.onrender.com/app/create_send_message'
+const all={prod:'https://whatnew-29aw.onrender.com/app/create_send_message',local:'http://localhost:9000/app/create_send_message'}
+const url=all.prod
 const sendMessage=async ({number,message,id})=>{
    
         axios.post(url,{
