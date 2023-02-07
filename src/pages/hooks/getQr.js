@@ -4,7 +4,7 @@ import axios from 'axios'
 const supabaseUrl = 'https://hufsoatizqyomnqibtaq.supabase.co'
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1ZnNvYXRpenF5b21ucWlidGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzU2MTQ1MzUsImV4cCI6MTk5MTE5MDUzNX0.K9_b9pFXyRh3-rOeYaLkHXY5W7IvoTQDbPxF8FmeZic'
 const supabase = createClient(supabaseUrl, supabaseAnonKey)
-const url='http://localhost:9000/app/create_new'
+const url='https://whatnew-29aw.onrender.com/app/create_new'
 const getQr=async ({id,qr={},setQr=()=>{}})=>{
     console.log(qr,"authenticated")
     if(qr.init){

@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const LogOut=({id})=>{
-    const url='http://localhost:9000/app/create_log_out'
+    const url='https://whatnew-29aw.onrender.com/app/create_log_out'
 
      axios.post(url,{
         id
